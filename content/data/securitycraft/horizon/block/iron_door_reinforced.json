@@ -1,0 +1,10 @@
+{
+  "template": "minecraft:iron_door",
+  "properties": {
+    "hardness": 5.0,
+    "explosion_resistance": 3600000.0,
+    "sounds": "minecraft:iron_block",
+    "requires_tool": true
+  },
+  "item": true
+}

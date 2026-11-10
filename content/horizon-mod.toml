@@ -1,0 +1,13 @@
+# Port-owned content mod for SecurityCraft 1.10.2.1 (1.21.1 NeoForge), carried
+# to Minecraft 26.3 / Horizon `1d63e0a`: the keypad block, the reinforced door
+# and the key panel item. The keypad and door models, blockstates, textures,
+# loot and lang are the upstream mod's own assets (MIT, local-only until the
+# maintainer approves publishing; see ../notes.md).
+id = "securitycraft"
+name = "SecurityCraft"
+version = "0.1.0"
+description = "The keypad and the reinforced door (slice 1)"
+authors = ["Geforce132 and the SecurityCraft contributors"]
+api = "0.2"
+side = "both"
+capabilities = ["registries"]

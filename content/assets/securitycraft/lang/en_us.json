@@ -1,0 +1,6 @@
+{
+    "block.securitycraft.keypad": "Keypad",
+    "item.securitycraft.keypad_item": "Key Panel",
+    "block.securitycraft.iron_door_reinforced": "Reinforced Door",
+    "itemGroup.securitycraft": "SecurityCraft"
+}

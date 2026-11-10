@@ -1,0 +1,39 @@
+id = "securitycraft"
+kind = "native-mod"
+name = "SecurityCraft"
+summary = "Keypads, reinforced doors and the rest of SecurityCraft's block protection, ported to Horizon."
+description = """
+A port of [SecurityCraft](https://github.com/Geforce132/SecurityCraft) by
+Geforce132 for Horizon. This first slice brings the **keypad** and the
+**reinforced iron door**:
+
+- Place a keypad, open it and type a code with its on-screen keypad; the code is
+  stored salted and hashed, never in plain text.
+- The keypad powers a redstone signal for 60 ticks when the right code is
+  entered, which opens a reinforced iron door placed beside it.
+- A wrong code leaves the door closed; a keypad with no door powers but opens
+  nothing; an empty code stores nothing; a bare hand cannot open the reinforced
+  door.
+- `/securitycraft info|code` for testing.
+
+Original copyright and licence notices are kept in the port repository. Pinned
+to Horizon 1d63e0a and horizon-mixins 5a64af93. Later slices cover the
+owner/allowlist system, the modules, the reinforced-block family and the
+remaining machines.
+"""
+authors = ["Geforce132", "AdLf0208"]
+owners = ["AdLf0208"]
+owner_ids = [107615167]
+license = "MIT"
+source = "https://github.com/AdLf0208/securitycraft"
+icon = "icons/securitycraft.png"
+categories = ["game-mechanics", "utility"]
+tags = ["port", "security", "keypad", "door", "redstone"]
+
+[[versions]]
+version = "0.1.0"
+published = "2026-11-09"
+game = "26.3"
+file = "securitycraft.hnmod"
+sha256 = "7ee2aeaeeec98b01b72bbb40bf79b516b97cd1489dd042e175f3ced96e87a910"
+changelog = "First release"

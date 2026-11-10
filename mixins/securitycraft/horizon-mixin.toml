@@ -1,0 +1,228 @@
+[mod]
+id = "securitycraft"
+version = "0.1.0"
+priority = 100
+
+[compatibility]
+horizon_revision = "1d63e0a5a37a7a708eb0b32b49bf0dfeb28ed8a9"
+
+# The pure keypad rules (code validation, the salted digest, the verdict, the
+# entry, the signal countdown), also built as the standalone crate library.
+[[module]]
+id = "runtime"
+file = "crates/horizon-client/src/game.rs"
+name = "securitycraft"
+source = "runtime.rs"
+
+# Game-side glue: the keypad's block entity, menu, screen, redstone and the
+# `/securitycraft` commands.
+[[module]]
+id = "state"
+file = "crates/horizon-client/src/game.rs"
+name = "securitycraft_state"
+source = "support.rs"
+
+# The content half is inside this bundle (`data/securitycraft-content.hmod`, the built
+# `content/securitycraft.hmod`): this writes it to `.horizon-cache/` and appends it to the
+# dev-mod list, so one `.hnmod` installs the keypad, the door and the code. The registry keeps
+# one file per project, so a split port could not be listed; AE2 ships the same pattern.
+[[injection]]
+id = "embedded-content"
+kind = "HEAD"
+cancellable = true
+target = "horizon_client::game::mods::content_root"
+helper = "embedded_content.rs"
+bindings = [
+  { name = "root", ty = "&std::path::Path", value = "root" },
+  { name = "enabled", ty = "&std::collections::BTreeSet<String>", value = "enabled" },
+  { name = "dev", ty = "&[std::path::PathBuf]", value = "dev" },
+]
+
+# The keypad declares a block entity (`native_block_entity`, API 15).
+[[injection]]
+id = "block-entity"
+hook = "block_entity"
+hook_version = 1
+kind = "HEAD"
+helper = "block_entity.rs"
+bindings = [
+  { name = "block", ty = "&str", value = "block" },
+  { name = "entity", ty = "&mut Option<(String, horizon_world::nbt::Compound)>", value = "entity" },
+]
+
+# ... and ticks it: the signal countdown and the menu's data slots.
+[[injection]]
+id = "block-entity-ticks"
+hook = "block_entity_ticks"
+hook_version = 1
+kind = "HEAD"
+helper = "block_entity_ticks.rs"
+bindings = [
+  { name = "block", ty = "&str", value = "block" },
+  { name = "ticks", ty = "&mut bool", value = "ticks" },
+]
+
+# The keypad's menu (one hidden slot) and the content menu type it names
+# (`native_block_entity_container`, API 16/17).
+[[injection]]
+id = "block-entity-container"
+hook = "block_entity_container"
+hook_version = 1
+kind = "HEAD"
+helper = "block_entity_container.rs"
+bindings = [
+  { name = "block", ty = "&str", value = "block" },
+  { name = "container", ty = "&mut Option<horizon_client::containers::ModContainer>", value = "container" },
+]
+
+# The countdown and the data slots, once per tick.
+[[injection]]
+id = "block-entity-tick"
+hook = "block_entity_tick"
+hook_version = 1
+kind = "HEAD"
+helper = "block_entity_tick.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "pos", ty = "[i32; 3]", value = "pos" },
+  { name = "entity", ty = "&mut horizon_client::containers::ModBlockEntity", value = "entity" },
+]
+
+# A right click opens the keypad's check or set screen; a powered keypad does
+# nothing (`native_right_click_block`, API 21).
+[[injection]]
+id = "right-click-block"
+hook = "right_click_block"
+hook_version = 1
+kind = "HEAD"
+helper = "right_click_block.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "pos", ty = "[i32; 3]", value = "pos" },
+  { name = "face", ty = "[i32; 3]", value = "face" },
+  { name = "canceled", ty = "&mut bool", value = "canceled" },
+]
+
+# The keypad's own panel: the code display and the twelve keys
+# (`native_screen`, API 19).
+[[injection]]
+id = "screen"
+hook = "screen"
+hook_version = 1
+kind = "HEAD"
+helper = "screen.rs"
+bindings = [
+  { name = "block", ty = "&str", value = "block" },
+  { name = "screen", ty = "&mut Option<NativeScreen>", value = "screen" },
+]
+
+# ... its drawing.
+[[injection]]
+id = "screen-draw"
+hook = "screen_draw"
+hook_version = 1
+kind = "HEAD"
+helper = "screen_draw.rs"
+bindings = [
+  { name = "game", ty = "&crate::game::Game<'_>", value = "self" },
+  { name = "block", ty = "&str", value = "block" },
+  { name = "data", ty = "&[i32]", value = "data" },
+  { name = "batch", ty = "&mut horizon_client::hud::HudBatch", value = "batch" },
+  { name = "origin", ty = "[f32; 2]", value = "origin" },
+]
+
+# A press on a key names the menu button the game sends to the server
+# (`native_screen_click`, API 20).
+[[injection]]
+id = "screen-click"
+hook = "screen_click"
+hook_version = 1
+kind = "HEAD"
+helper = "screen_click.rs"
+bindings = [
+  { name = "block", ty = "&str", value = "block" },
+  { name = "data", ty = "&[i32]", value = "data" },
+  { name = "at", ty = "[f32; 2]", value = "at" },
+  { name = "right", ty = "bool", value = "right" },
+  { name = "button", ty = "&mut Option<i32>", value = "button" },
+]
+
+# The server applies that press to the block entity (`native_menu_button`,
+# API 20).
+[[injection]]
+id = "menu-button"
+hook = "menu_button"
+hook_version = 1
+kind = "HEAD"
+helper = "menu_button.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "pos", ty = "[i32; 3]", value = "pos" },
+  { name = "entity", ty = "&mut horizon_client::containers::ModBlockEntity", value = "entity" },
+  { name = "id", ty = "i32", value = "id" },
+]
+
+# The keypad gives 15 on every face while powered, and redstone dust connects
+# to it (`native_block_signal` / `native_is_signal_source`, API 38).
+[[injection]]
+id = "block-signal"
+hook = "block_signal"
+hook_version = 1
+kind = "HEAD"
+helper = "block_signal.rs"
+bindings = [
+  { name = "game", ty = "&crate::game::GameLevel<'_>", value = "&*self" },
+  { name = "state", ty = "horizon_world::registry::BlockStateId", value = "state" },
+  { name = "signal", ty = "&mut i32", value = "signal" },
+]
+
+[[injection]]
+id = "is-signal-source"
+hook = "is_signal_source"
+hook_version = 1
+kind = "HEAD"
+helper = "signal_source.rs"
+bindings = [
+  { name = "game", ty = "&crate::game::GameLevel<'_>", value = "&*self" },
+  { name = "state", ty = "horizon_world::registry::BlockStateId", value = "state" },
+  { name = "source", ty = "&mut bool", value = "source" },
+]
+
+# The keypad is placed facing its placer (`native_state_for_placement`).
+[[injection]]
+id = "state-for-placement"
+hook = "state_for_placement"
+hook_version = 1
+kind = "HEAD"
+helper = "state_for_placement.rs"
+bindings = [
+  { name = "game", ty = "&crate::game::GameLevel<'_>", value = "&*self" },
+  { name = "state", ty = "horizon_world::registry::BlockStateId", value = "state" },
+  { name = "context", ty = "&horizon_world::level::PlacementContext", value = "context" },
+  { name = "answer", ty = "&mut Option<Option<horizon_world::registry::BlockStateId>>", value = "answer" },
+]
+
+# `/securitycraft info|code`: the harness controls this slice's e2e needs
+# (there is no way to type into a text field headlessly).
+[[injection]]
+id = "register-commands"
+hook = "register_commands"
+hook_version = 1
+kind = "HEAD"
+helper = "register_commands.rs"
+bindings = [
+  { name = "commands", ty = "&mut Vec<NativeCommand>", value = "commands" },
+]
+
+[[injection]]
+id = "perform-command"
+hook = "perform_command"
+hook_version = 1
+kind = "HEAD"
+helper = "perform_command.rs"
+bindings = [
+  { name = "game", ty = "&mut crate::game::Game<'_>", value = "&mut *self" },
+  { name = "player", ty = "&NativeServerPlayer", value = "player" },
+  { name = "command", ty = "&str", value = "command" },
+  { name = "ran", ty = "&mut bool", value = "ran" },
+]

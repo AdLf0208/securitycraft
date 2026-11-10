@@ -1,0 +1,8 @@
+{
+  "title": "itemGroup.securitycraft",
+  "icon": "securitycraft:keypad_item",
+  "items": [
+    "securitycraft:keypad_item",
+    "securitycraft:iron_door_reinforced"
+  ]
+}

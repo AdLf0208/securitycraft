@@ -1,0 +1,21 @@
+[package]
+name = "securitycraft"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+license = "MIT"
+description = "SecurityCraft for Horizon: the keypad and the reinforced door (slice 1)"
+
+[lib]
+# This exact source is also injected as a same-crate module by horizon-mixins.
+path = "mixins/securitycraft/runtime.rs"
+
+[dependencies]
+# The keypad keeps its code as a salted SHA-256 digest, as upstream keeps a
+# salted PBKDF2 hash; `sha2` is already a dependency of `horizon-client` at the
+# pin, so the injected module and this library use the same crate.
+sha2 = "0.10"
+
+[workspace]
+members = ["tools/audit"]
+resolver = "2"
