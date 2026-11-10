@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,open=false,powered=false": {
+      "model": "securitycraft:block/keypad"
+    },
+    "facing=north,open=false,powered=true": {
+      "model": "securitycraft:block/keypad_powered"
+    },
+    "facing=north,open=true,powered=false": {
+      "model": "securitycraft:block/keypad"
+    },
+    "facing=north,open=true,powered=true": {
+      "model": "securitycraft:block/keypad_powered"
+    },
+    "facing=east,open=false,powered=false": {
+      "model": "securitycraft:block/keypad",
+      "y": 90
+    },
+    "facing=east,open=false,powered=true": {
+      "model": "securitycraft:block/keypad_powered",
+      "y": 90
+    },
+    "facing=east,open=true,powered=false": {
+      "model": "securitycraft:block/keypad",
+      "y": 90
+    },
+    "facing=east,open=true,powered=true": {
+      "model": "securitycraft:block/keypad_powered",
+      "y": 90
+    },
+    "facing=south,open=false,powered=false": {
+      "model": "securitycraft:block/keypad",
+      "y": 180
+    },
+    "facing=south,open=false,powered=true": {
+      "model": "securitycraft:block/keypad_powered",
+      "y": 180
+    },
+    "facing=south,open=true,powered=false": {
+      "model": "securitycraft:block/keypad",
+      "y": 180
+    },
+    "facing=south,open=true,powered=true": {
+      "model": "securitycraft:block/keypad_powered",
+      "y": 180
+    },
+    "facing=west,open=false,powered=false": {
+      "model": "securitycraft:block/keypad",
+      "y": 270
+    },
+    "facing=west,open=false,powered=true": {
+      "model": "securitycraft:block/keypad_powered",
+      "y": 270
+    },
+    "facing=west,open=true,powered=false": {
+      "model": "securitycraft:block/keypad",
+      "y": 270
+    },
+    "facing=west,open=true,powered=true": {
+      "model": "securitycraft:block/keypad_powered",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "minecraft:stone_button",
+    "P": "minecraft:heavy_weighted_pressure_plate"
+  },
+  "pattern": [
+    "BBB",
+    "BPB",
+    "BBB"
+  ],
+  "result": {
+    "id": "securitycraft:keypad_item"
+  }
+}
